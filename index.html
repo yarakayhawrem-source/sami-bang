@@ -1,17 +1,14 @@
-<!DOCTYPE html>
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ئاسۆی قەڵادزێ پڕۆ - وەشانی کۆتایی</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -144,7 +141,6 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-amber-500/30">
 
-    <!-- Loading Screen -->
     <div id="loadingScreen" class="loading-overlay">
         <div class="spinner-box mb-8">
             <div class="spinner-ring"></div>
@@ -154,7 +150,6 @@
         <p class="text-neutral-500 text-sm font-medium animate-pulse">خەریکی وەرگرتنی کاتەکانە...</p>
     </div>
 
-    <!-- Background Layers -->
     <div class="fixed inset-0 z-0 pointer-events-none">
         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop')] bg-cover bg-center opacity-[0.12]"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black"></div>
@@ -162,13 +157,10 @@
         <div class="absolute bottom-[-20%] right-[-20%] w-[70%] h-[70%] bg-orange-600/10 blur-[180px] rounded-full"></div>
     </div>
 
-    <!-- Audio Engine -->
-    <audio id="adhanAudio" src="https://media.blubrry.com/muslim_central_adhan/content.blubrry.com/muslim_central_adhan/Adhan_Makkah.mp3" preload="auto"></audio>
+    <audio id="adhanAudio" src="https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/8b234542ee9a037b8b80909408fb7e791bf4b0dc/rekar-karim-Athan.mp3" preload="auto"></audio>
 
-    <!-- Main Content -->
     <div class="relative z-10 flex-1 flex flex-col max-w-2xl mx-auto w-full px-6 pt-10 pb-32">
         
-        <!-- App Header -->
         <header class="flex justify-between items-center mb-12 animate-fade-in">
             <div class="flex items-center gap-5">
                 <div class="w-16 h-16 rounded-[1.5rem] glass flex items-center justify-center text-amber-400 shadow-2xl border-white/10">
@@ -194,15 +186,12 @@
             </div>
         </header>
 
-        <!-- Dynamic Tabs -->
         <div id="tab-prayers" class="tab-content active flex-col space-y-10">
-            <!-- Hero Clock -->
             <section class="text-center py-8 animate-float">
                 <h2 id="mainClock" class="text-8xl font-black tracking-tighter mb-5 tabular-nums drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">00:00</h2>
                 <p id="kurdishDate" class="text-neutral-400 font-bold text-xl tracking-wide">---</p>
             </section>
 
-            <!-- Next Prayer Card -->
             <section id="nextPrayerCard" class="glass rounded-[3.5rem] p-12 relative overflow-hidden group shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-all duration-1000">
                 <div class="absolute top-0 left-0 w-full h-2.5 bg-gradient-to-r from-amber-500 via-orange-400 to-amber-600"></div>
                 <div class="flex justify-between items-start mb-10">
@@ -220,13 +209,10 @@
                 </div>
             </section>
 
-            <!-- Prayer List -->
             <section id="prayerList" class="grid grid-cols-1 gap-4">
-                <!-- Prayer items -->
-            </section>
+                </section>
         </div>
 
-        <!-- Tab: Qibla -->
         <div id="tab-qibla" class="tab-content hidden flex-col items-center justify-center py-16 space-y-16">
             <h2 class="text-4xl font-extrabold tracking-tight">قیبلەنما</h2>
             <div class="relative w-80 h-80 flex items-center justify-center">
@@ -241,7 +227,6 @@
             <button onclick="requestCompassPermission()" class="px-8 py-4 glass rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all">چالاککردنی سێنسەر</button>
         </div>
 
-        <!-- Tab: Tasbih -->
         <div id="tab-tasbih" class="tab-content hidden flex-col items-center py-10 space-y-12">
             <h2 class="text-4xl font-extrabold tracking-tight">تەسبیح</h2>
             <div class="relative w-80 h-80 flex items-center justify-center">
@@ -257,13 +242,11 @@
             </div>
         </div>
 
-        <!-- Tab: Azkar -->
         <div id="tab-azkar" class="tab-content hidden flex-col space-y-8">
             <h2 class="text-4xl font-extrabold tracking-tight">زیکرەکان</h2>
             <div id="azkarList" class="space-y-5 pb-12"></div>
         </div>
 
-        <!-- Tab: More -->
         <div id="tab-more" class="tab-content hidden flex-col space-y-10">
             <h2 class="text-4xl font-extrabold tracking-tight">زیاتر</h2>
             <div id="namesList" class="grid grid-cols-2 gap-5 pb-12"></div>
@@ -271,7 +254,6 @@
 
     </div>
 
-    <!-- Navigation -->
     <nav class="fixed bottom-0 left-0 right-0 z-[100] glass-heavy border-t border-white/10 px-8 pt-5 pb-10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
         <div class="max-w-md mx-auto flex justify-between items-center">
             <button onclick="switchTab('prayers')" class="nav-item flex flex-col items-center gap-2 transition-all duration-500 nav-item-active" id="nav-prayers">
@@ -297,7 +279,6 @@
         </div>
     </nav>
 
-    <!-- Modals -->
     <div id="settingsModal" class="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/95 backdrop-blur-2xl p-4 hidden">
         <div class="bg-neutral-950 w-full max-w-md rounded-[3.5rem] p-12 border border-white/10 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
             <div class="flex justify-between items-center mb-12">
