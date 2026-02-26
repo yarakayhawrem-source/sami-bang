@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ئاسۆی قەڵادزێ پڕۆ | Ultimate Edition</title>
+    <title>کاتەکانی بانگ    | Athan Times </title>
     
     <meta name="theme-color" content="#020202">
-    <link rel="manifest" href="data:application/json;base64,ewogICJpZCI6ICJhc29pLXFhbGFkemUiLAogICJuYW1lIjogIsカイ4LPۆی Þەڵادزێ ÞڕۆIiwKICAic2hvcnRfbmFtZSI6ICJhc29pIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjAyMDIiCn0=">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/450380601a15e12a80be482ee5149dd6dc52a0de/D5208D5D-BECD-4A90-9B8F-B7FC0679E5FA.jpeg">
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/450380601a15e12a80be482ee5149dd6dc52a0de/D5208D5D-BECD-4A90-9B8F-B7FC0679E5FA.jpeg">
+    
+    <link rel="manifest" href="data:application/json;base64,ewogICJpZCI6ICJhc29pLXFhbGFkemUiLAogICJuYW1lIjogIsカイ4LPۆی Þەڵادزێ ÞڕۆIiwKICAic2hvcnRfbmFtZSI6ICJhc29pIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjAyMDIiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vcmFtaXFhbGFkemF5MC9yYW1hZGFuLWNoYWxsZW5nZS80NTAzODA2MDFhMTVlMTJhODBiZTQ4MmVlNTE0OWRkNmRjNTJhMGRlL0Q1MjA4RDVELUJFQ0QtNEE5MC05QjhGLUI3RkMwNjc5RTVGQS5qcGVnIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9qcGVnIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -67,7 +70,7 @@
 
     <div id="loadingScreen" class="fixed inset-0 z-[999] bg-black flex flex-col items-center justify-center">
         <i data-lucide="loader-2" class="text-amber-500 w-10 h-10 animate-spin mb-4"></i>
-        <h2 class="text-lg font-bold tracking-widest animate-pulse font-['Noto_Sans_Arabic']">خەریکی بارکردنە...</h2>
+        <h2 class="text-lg font-bold tracking-widest animate-pulse font-['Noto_Sans_Arabic']">کەمێک چاوەڕێ بکە ...</h2>
     </div>
 
     <div class="relative z-10 max-w-2xl mx-auto w-full px-6 pt-10 pb-32">
@@ -77,7 +80,7 @@
                 <div class="w-12 h-12 rounded-2xl glass flex items-center justify-center text-amber-500">
                     <i data-lucide="mosque" class="w-6 h-6"></i>
                 </div>
-                <h1 class="text-xl font-black font-['Noto_Sans_Arabic']">ئاسۆی قەڵادزێ <span class="text-amber-500 text-xs">PRO</span></h1>
+                <h1 class="text-xl font-black font-['Noto_Sans_Arabic']">کاتەکانی بانگ <span class="text-amber-500 text-xs">PRO</span></h1>
             </div>
             <button onclick="openModal('calendarModal')" class="w-11 h-11 rounded-xl glass flex items-center justify-center">
                 <i data-lucide="calendar-days" class="w-5 h-5"></i>
@@ -211,12 +214,10 @@
             updateClock();
             setInterval(updateClock, 1000);
             
-            // Ask for Notification Permission
             if ("Notification" in window) {
                 Notification.requestPermission();
             }
 
-            // Keep screen on
             if ('wakeLock' in navigator) {
                 try { state.wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
             }
@@ -292,7 +293,6 @@
             Object.entries(state.times).forEach(([key, data]) => {
                 let diff = data.raw.getTime() - now.getTime();
                 
-                // Trigger Athan
                 if (Math.abs(diff) < 1000 && state.lastPlayed !== key && !state.muted[key] && key !== 'Sunrise') {
                     playAthan(key);
                 }
@@ -356,7 +356,6 @@
             localStorage.setItem('tasbih_pro', state.tasbih);
             if (navigator.vibrate) navigator.vibrate(50);
             
-            // Critical: Unlock audio for auto-play later
             const audio = document.getElementById('adhanAudio');
             audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
         }
