@@ -3,625 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ئاسۆی قەڵادزێ پڕۆ - وەشانی کۆتایی</title>
+    <title>ئاسۆی قەڵادزێ پڕۆ | Ultimate Edition</title>
     
+    <meta name="theme-color" content="#020202">
+    <link rel="manifest" href="data:application/json;base64,ewogICJpZCI6ICJhc29pLXFhbGFkemUiLAogICJuYW1lIjogIsカイ4LPۆی Þەڵادزێ ÞڕۆIiwKICAic2hvcnRfbmFtZSI6ICJhc29pIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjAyMDIiCn0=">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
         :root {
             --primary: #fbbf24;
-            --primary-glow: rgba(251, 191, 36, 0.4);
-            --bg-dark: #050505;
+            --bg-dark: #020202;
             --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-            --accent: #f59e0b;
+            --border: rgba(255, 255, 255, 0.07);
         }
 
-        * {
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { -webkit-tap-highlight-color: transparent; user-select: none; box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
             background-color: var(--bg-dark);
             color: #ffffff;
             overflow-x: hidden;
-            scroll-behavior: smooth;
             line-height: 1.6;
         }
 
-        /* --- Animations --- */
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        .animate-fade-in { animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .mesh-bg { background: radial-gradient(circle at 50% -20%, #1a1500 0%, #020202 80%); }
 
-        @keyframes float { 
-            0%, 100% { transform: translateY(0px); } 
-            50% { transform: translateY(-15px); } 
-        }
-        .animate-float { animation: float 8s ease-in-out infinite; }
-
-        @keyframes pulse-glow { 
-            0%, 100% { box-shadow: 0 0 20px var(--primary-glow); } 
-            50% { box-shadow: 0 0 40px var(--primary-glow); } 
-        }
-        .animate-pulse-glow { animation: pulse-glow 3s infinite; }
-
-        /* --- Glassmorphism --- */
         .glass {
             background: var(--card-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-        .glass:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.15);
         }
 
-        .glass-heavy {
-            background: rgba(10, 10, 10, 0.92);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        /* --- Custom UI Elements --- */
         .prayer-card-active {
-            background: linear-gradient(145deg, rgba(251, 191, 36, 0.2) 0%, rgba(217, 119, 6, 0.05) 100%);
-            border: 1px solid rgba(251, 191, 36, 0.5);
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
-            transform: scale(1.03);
+            background: linear-gradient(145deg, rgba(251, 191, 36, 0.1) 0%, rgba(5, 5, 5, 0.4) 100%);
+            border: 1px solid var(--primary);
         }
 
-        .nav-item-active { color: var(--primary); }
-        .nav-item-active i { transform: translateY(-4px); filter: drop-shadow(0 0 8px var(--primary)); }
+        .nav-item { transition: all 0.3s ease; opacity: 0.5; }
+        .nav-item.active { opacity: 1; color: var(--primary); }
 
-        .tab-content { display: none; width: 100%; opacity: 0; }
-        .tab-content.active { display: flex; opacity: 1; animation: fadeIn 0.5s ease-out; }
+        .tab-content { display: none; opacity: 0; }
+        .tab-content.active { display: flex; opacity: 1; animation: fadeIn 0.5s forwards; }
 
-        .tasbih-btn:active { transform: scale(0.85); }
-        
-        /* --- Loading Overlay --- */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-        }
-        .loading-overlay.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .spinner-box {
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .spinner-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 4px solid transparent;
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* --- Custom Scrollbar --- */
-        ::-webkit-scrollbar { width: 0px; }
-        
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        .status-btn.muted { color: #ef4444; opacity: 0.8; }
+        .status-btn.active { color: #22c55e; }
 
-        /* --- Compass --- */
-        .compass-container {
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+        #compass-disc { transition: transform 0.2s ease-out; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-amber-500/30">
-
-    <div id="loadingScreen" class="loading-overlay">
-        <div class="spinner-box mb-8">
-            <div class="spinner-ring"></div>
-            <i data-lucide="mosque" class="text-amber-500 w-8 h-8"></i>
-        </div>
-        <h2 class="text-2xl font-black tracking-widest text-white mb-2">ئاسۆی قەڵادزێ</h2>
-        <p class="text-neutral-500 text-sm font-medium animate-pulse">خەریکی وەرگرتنی کاتەکانە...</p>
-    </div>
-
-    <div class="fixed inset-0 z-0 pointer-events-none">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop')] bg-cover bg-center opacity-[0.12]"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black"></div>
-        <div class="absolute top-[-20%] left-[-20%] w-[70%] h-[70%] bg-amber-500/10 blur-[180px] rounded-full"></div>
-        <div class="absolute bottom-[-20%] right-[-20%] w-[70%] h-[70%] bg-orange-600/10 blur-[180px] rounded-full"></div>
-    </div>
+<body class="min-h-screen mesh-bg">
 
     <audio id="adhanAudio" src="https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/8b234542ee9a037b8b80909408fb7e791bf4b0dc/rekar-karim-Athan.mp3" preload="auto"></audio>
 
-    <div class="relative z-10 flex-1 flex flex-col max-w-2xl mx-auto w-full px-6 pt-10 pb-32">
-        
-        <header class="flex justify-between items-center mb-12 animate-fade-in">
-            <div class="flex items-center gap-5">
-                <div class="w-16 h-16 rounded-[1.5rem] glass flex items-center justify-center text-amber-400 shadow-2xl border-white/10">
-                    <i data-lucide="mosque" class="w-8 h-8"></i>
-                </div>
-                <div>
-                    <h1 class="text-2xl font-black tracking-tight">ئاسۆی قەڵادزێ <span class="text-amber-500 text-[10px] font-black bg-amber-500/10 px-2.5 py-1 rounded-full uppercase ml-1">PRO</span></h1>
-                    <div class="flex items-center gap-2 text-neutral-500 text-xs mt-1.5 font-medium">
-                        <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                        <span>قەڵادزێ، پشدەر</span>
-                        <span class="mx-1 opacity-20">|</span>
-                        <span id="hijriDateHeader">---</span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="openModal('calendarModal')" class="w-12 h-12 rounded-2xl glass flex items-center justify-center hover:bg-white/10 transition-all active:scale-90 shadow-lg">
-                    <i data-lucide="calendar" class="w-5.5 h-5.5"></i>
-                </button>
-                <button onclick="openModal('settingsModal')" class="w-12 h-12 rounded-2xl glass flex items-center justify-center hover:bg-white/10 transition-all active:scale-90 shadow-lg">
-                    <i data-lucide="settings" class="w-5.5 h-5.5"></i>
-                </button>
-            </div>
-        </header>
-
-        <div id="tab-prayers" class="tab-content active flex-col space-y-10">
-            <section class="text-center py-8 animate-float">
-                <h2 id="mainClock" class="text-8xl font-black tracking-tighter mb-5 tabular-nums drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">00:00</h2>
-                <p id="kurdishDate" class="text-neutral-400 font-bold text-xl tracking-wide">---</p>
-            </section>
-
-            <section id="nextPrayerCard" class="glass rounded-[3.5rem] p-12 relative overflow-hidden group shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-all duration-1000">
-                <div class="absolute top-0 left-0 w-full h-2.5 bg-gradient-to-r from-amber-500 via-orange-400 to-amber-600"></div>
-                <div class="flex justify-between items-start mb-10">
-                    <div>
-                        <p class="text-neutral-500 text-[11px] font-black mb-3 uppercase tracking-[0.3em]">بانگی داهاتوو</p>
-                        <h3 id="nextPrayerName" class="text-5xl font-black text-white tracking-tight">---</h3>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-neutral-500 text-[11px] font-black mb-3 uppercase tracking-[0.3em]">ماوە بۆ بانگ</p>
-                        <div id="countdown" class="text-3xl font-mono font-black text-amber-400 tabular-nums drop-shadow-lg">00:00:00</div>
-                    </div>
-                </div>
-                <div class="relative w-full bg-white/5 h-4 rounded-full overflow-hidden mb-4 p-1 shadow-inner">
-                    <div id="prayerProgress" class="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
-                </div>
-            </section>
-
-            <section id="prayerList" class="grid grid-cols-1 gap-4">
-                </section>
-        </div>
-
-        <div id="tab-qibla" class="tab-content hidden flex-col items-center justify-center py-16 space-y-16">
-            <h2 class="text-4xl font-extrabold tracking-tight">قیبلەنما</h2>
-            <div class="relative w-80 h-80 flex items-center justify-center">
-                <div class="absolute inset-0 rounded-full border-[16px] border-white/5 shadow-2xl"></div>
-                <div id="compass" class="compass-container relative w-full h-full flex items-center justify-center">
-                    <div class="absolute top-0 w-2 h-32 bg-amber-500 rounded-full shadow-[0_0_20px_rgba(251,191,36,0.5)]"></div>
-                    <div class="w-20 h-20 glass-heavy rounded-full flex items-center justify-center shadow-2xl z-10 border-white/20">
-                        <i data-lucide="navigation" class="text-amber-500 w-10 h-10"></i>
-                    </div>
-                </div>
-            </div>
-            <button onclick="requestCompassPermission()" class="px-8 py-4 glass rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all">چالاککردنی سێنسەر</button>
-        </div>
-
-        <div id="tab-tasbih" class="tab-content hidden flex-col items-center py-10 space-y-12">
-            <h2 class="text-4xl font-extrabold tracking-tight">تەسبیح</h2>
-            <div class="relative w-80 h-80 flex items-center justify-center">
-                <svg class="absolute inset-0 w-full h-full -rotate-90">
-                    <circle cx="160" cy="160" r="145" stroke="currentColor" stroke-width="14" fill="transparent" class="text-white/5" />
-                    <circle id="tasbihProgress" cx="160" cy="160" r="145" stroke="var(--primary)" stroke-width="14" fill="transparent" stroke-dasharray="911" stroke-dashoffset="911" stroke-linecap="round" class="transition-all duration-700 ease-out shadow-2xl" />
-                </svg>
-                <div id="tasbihCount" class="text-9xl font-black tabular-nums tracking-tighter drop-shadow-2xl">0</div>
-            </div>
-            <div class="flex gap-8 w-full max-w-sm px-6">
-                <button onclick="resetTasbih()" class="w-24 h-24 glass rounded-[2.5rem] flex items-center justify-center text-neutral-500 hover:text-white transition-all"><i data-lucide="rotate-ccw" class="w-8 h-8"></i></button>
-                <button onclick="incrementTasbih()" class="flex-1 h-28 bg-amber-500 text-black rounded-[3rem] flex items-center justify-center shadow-2xl tasbih-btn transition-all"><i data-lucide="plus" class="w-12 h-12"></i></button>
-            </div>
-        </div>
-
-        <div id="tab-azkar" class="tab-content hidden flex-col space-y-8">
-            <h2 class="text-4xl font-extrabold tracking-tight">زیکرەکان</h2>
-            <div id="azkarList" class="space-y-5 pb-12"></div>
-        </div>
-
-        <div id="tab-more" class="tab-content hidden flex-col space-y-10">
-            <h2 class="text-4xl font-extrabold tracking-tight">زیاتر</h2>
-            <div id="namesList" class="grid grid-cols-2 gap-5 pb-12"></div>
-        </div>
-
+    <div id="loadingScreen" class="fixed inset-0 z-[999] bg-black flex flex-col items-center justify-center">
+        <i data-lucide="loader-2" class="text-amber-500 w-10 h-10 animate-spin mb-4"></i>
+        <h2 class="text-lg font-bold tracking-widest animate-pulse font-['Noto_Sans_Arabic']">خەریکی بارکردنە...</h2>
     </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 z-[100] glass-heavy border-t border-white/10 px-8 pt-5 pb-10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+    <div class="relative z-10 max-w-2xl mx-auto w-full px-6 pt-10 pb-32">
+        
+        <header class="flex justify-between items-center mb-10">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-2xl glass flex items-center justify-center text-amber-500">
+                    <i data-lucide="mosque" class="w-6 h-6"></i>
+                </div>
+                <h1 class="text-xl font-black font-['Noto_Sans_Arabic']">ئاسۆی قەڵادزێ <span class="text-amber-500 text-xs">PRO</span></h1>
+            </div>
+            <button onclick="openModal('calendarModal')" class="w-11 h-11 rounded-xl glass flex items-center justify-center">
+                <i data-lucide="calendar-days" class="w-5 h-5"></i>
+            </button>
+        </header>
+
+        <div id="tab-prayers" class="tab-content active flex-col space-y-6">
+            <section class="text-center py-10 glass rounded-[2.5rem] border-white/5 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
+                <h2 id="mainClock" class="text-7xl font-black tracking-tighter mb-2 tabular-nums">00:00</h2>
+                <p id="kurdishDate" class="text-neutral-500 font-bold text-sm">---</p>
+            </section>
+
+            <section class="glass rounded-[2rem] p-6 flex justify-between items-center">
+                <div>
+                    <p class="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1">بانگی داهاتوو</p>
+                    <h3 id="nextPrayerName" class="text-3xl font-black">---</h3>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-black uppercase tracking-widest text-neutral-500 mb-1">ماوە بۆ بانگ</p>
+                    <div id="countdown" class="text-2xl font-mono font-black text-amber-500">00:00:00</div>
+                </div>
+            </section>
+
+            <div id="prayerList" class="grid grid-cols-1 gap-3"></div>
+        </div>
+
+        <div id="tab-quran" class="tab-content flex-col space-y-4">
+            <h2 class="text-3xl font-black mb-2">قورئانی پیرۆز</h2>
+            <div id="surahList" class="grid grid-cols-1 gap-3 max-h-[70vh] overflow-y-auto no-scrollbar pb-10"></div>
+        </div>
+
+        <div id="tab-qibla" class="tab-content flex-col items-center justify-center py-10 space-y-10">
+            <div class="text-center">
+                <h2 class="text-4xl font-black mb-2">قیبلەنما</h2>
+                <p class="text-neutral-500 text-sm">مۆبایلەکەت بە ڕووتەختی ڕابگرە</p>
+            </div>
+            <div class="relative w-72 h-72">
+                <div id="compass-disc" class="w-full h-full relative">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2805/2805395.png" class="w-full h-full opacity-30" alt="Compass">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-1.5 h-32 bg-amber-500 rounded-full shadow-[0_0_20px_#fbbf24]"></div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="initCompass()" class="px-8 py-4 glass rounded-2xl text-xs font-black uppercase tracking-widest text-amber-500">چالاککردنی قیبلەنما</button>
+        </div>
+
+        <div id="tab-tasbih" class="tab-content flex-col items-center py-10 space-y-10">
+            <h2 class="text-3xl font-black">تەسبیح</h2>
+            <div onclick="incrementTasbih()" class="w-64 h-64 rounded-full glass border-4 border-amber-500/20 flex flex-col items-center justify-center cursor-pointer active:scale-95 transition-all">
+                <span id="tasbihCount" class="text-8xl font-black tabular-nums">0</span>
+                <span class="text-neutral-500 font-bold uppercase text-[10px] tracking-widest">Tap to Count</span>
+            </div>
+            <button onclick="resetTasbih()" class="flex items-center gap-2 text-neutral-500 hover:text-white transition-colors">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i> ریسێتکردنەوە
+            </button>
+        </div>
+
+        <div id="tab-azkar" class="tab-content flex-col space-y-6">
+            <div class="flex gap-2 p-1 glass rounded-2xl">
+                <button onclick="switchAzkarSub('azkar')" id="btn-sub-azkar" class="flex-1 py-3 rounded-xl font-bold bg-amber-500 text-black">زیکرەکان</button>
+                <button onclick="switchAzkarSub('names')" id="btn-sub-names" class="flex-1 py-3 rounded-xl font-bold text-neutral-400">ناوە جوانەکان</button>
+            </div>
+            <div id="sub-azkar" class="space-y-3 pb-20"></div>
+            <div id="sub-names" class="hidden grid grid-cols-2 gap-3 pb-20"></div>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 right-0 z-[100] glass border-t border-white/5 px-6 pt-4 pb-8">
         <div class="max-w-md mx-auto flex justify-between items-center">
-            <button onclick="switchTab('prayers')" class="nav-item flex flex-col items-center gap-2 transition-all duration-500 nav-item-active" id="nav-prayers">
-                <i data-lucide="clock" class="w-6.5 h-6.5"></i>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em]">کاتەکان</span>
-            </button>
-            <button onclick="switchTab('qibla')" class="nav-item flex flex-col items-center gap-2 transition-all duration-500 text-neutral-600" id="nav-qibla">
-                <i data-lucide="compass" class="w-6.5 h-6.5"></i>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em]">قیبلە</span>
-            </button>
-            <button onclick="switchTab('tasbih')" class="nav-item flex flex-col items-center gap-2 transition-all duration-500 text-neutral-600" id="nav-tasbih">
-                <i data-lucide="fingerprint" class="w-6.5 h-6.5"></i>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em]">تەسبیح</span>
-            </button>
-            <button onclick="switchTab('azkar')" class="nav-item flex flex-col items-center gap-2 transition-all duration-500 text-neutral-600" id="nav-azkar">
-                <i data-lucide="book-open" class="w-6.5 h-6.5"></i>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em]">زیکر</span>
-            </button>
-            <button onclick="switchTab('more')" class="nav-item flex flex-col items-center gap-2 transition-all duration-500 text-neutral-600" id="nav-more">
-                <i data-lucide="layout-grid" class="w-6.5 h-6.5"></i>
-                <span class="text-[10px] font-black uppercase tracking-[0.2em]">زیاتر</span>
-            </button>
+            <button onclick="switchTab('prayers')" class="nav-item flex flex-col items-center gap-1 active" id="nav-prayers"><i data-lucide="home" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Home</span></button>
+            <button onclick="switchTab('quran')" class="nav-item flex flex-col items-center gap-1" id="nav-quran"><i data-lucide="book-open" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Quran</span></button>
+            <button onclick="switchTab('qibla')" class="nav-item flex flex-col items-center gap-1" id="nav-qibla"><i data-lucide="compass" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Qibla</span></button>
+            <button onclick="switchTab('tasbih')" class="nav-item flex flex-col items-center gap-1" id="nav-tasbih"><i data-lucide="fingerprint" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Dhikr</span></button>
+            <button onclick="switchTab('azkar')" class="nav-item flex flex-col items-center gap-1" id="nav-azkar"><i data-lucide="heart" class="w-6 h-6"></i><span class="text-[8px] font-black uppercase">Names</span></button>
         </div>
     </nav>
 
-    <div id="settingsModal" class="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/95 backdrop-blur-2xl p-4 hidden">
-        <div class="bg-neutral-950 w-full max-w-md rounded-[3.5rem] p-12 border border-white/10 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
-            <div class="flex justify-between items-center mb-12">
-                <h3 class="text-3xl font-black">ڕێکخستنەکان</h3>
-                <button onclick="closeModal('settingsModal')" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all active:scale-90">
-                    <i data-lucide="x" class="w-7 h-7"></i>
-                </button>
-            </div>
-            <div class="space-y-10">
-                <div class="glass p-8 rounded-[2.5rem] space-y-6">
-                    <p class="font-black text-sm uppercase tracking-[0.2em] text-amber-500">ڕێکخستنی وردی ئاسۆ</p>
-                    <div id="adjustmentList" class="space-y-5"></div>
-                </div>
-                <div class="flex items-center justify-between glass p-8 rounded-[2.5rem]">
-                    <p class="font-black text-sm uppercase tracking-[0.2em]">ئاگادارکردنەوە</p>
-                    <button onclick="toggleNotifications()" id="notifToggle" class="w-18 h-10 rounded-full bg-neutral-900 relative transition-all duration-500 border border-white/10">
-                        <div id="notifCircle" class="absolute left-1.5 top-1.5 w-7 h-7 rounded-full bg-white transition-all duration-500"></div>
-                    </button>
-                </div>
-                <div class="glass p-8 rounded-[2.5rem] space-y-8">
-                    <p class="font-black text-sm uppercase tracking-[0.2em]">دەنگی بانگ</p>
-                    <div class="flex gap-5">
-                        <button onclick="document.getElementById('audioInput').click()" class="flex-1 bg-white/5 hover:bg-white/10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] transition-all active:scale-95 border border-white/5">گۆڕینی دەنگ</button>
-                        <button onclick="testAudio()" class="w-20 h-20 bg-amber-500/20 text-amber-500 rounded-3xl flex items-center justify-center hover:bg-amber-500/30 transition-all active:scale-90 shadow-lg">
-                            <i data-lucide="play" class="w-8 h-8"></i>
-                        </button>
-                    </div>
-                    <input type="file" id="audioInput" accept="audio/*" class="hidden" onchange="handleAudioUpload(event)">
-                </div>
-            </div>
-            <button onclick="closeModal('settingsModal')" class="w-full mt-12 bg-white text-black font-black py-5 rounded-[2rem] hover:bg-neutral-200 transition-all active:scale-95 shadow-2xl uppercase tracking-[0.3em] text-xs">پاشەکەوت و داخستن</button>
+    <div id="calendarModal" class="fixed inset-0 z-[300] bg-black/95 backdrop-blur-xl hidden p-6 overflow-y-auto no-scrollbar">
+        <div class="flex justify-between items-center mb-8">
+            <h3 class="text-2xl font-black">خشتەی مانگانە</h3>
+            <button onclick="closeModal('calendarModal')" class="w-10 h-10 glass rounded-full flex items-center justify-center"><i data-lucide="x"></i></button>
         </div>
+        <div id="monthlyCalendar" class="space-y-2"></div>
     </div>
 
-    <div id="calendarModal" class="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-black/95 backdrop-blur-2xl p-4 hidden">
-        <div class="bg-neutral-950 w-full max-w-md rounded-[3.5rem] p-12 border border-white/10 shadow-2xl max-h-[85vh] overflow-y-auto no-scrollbar">
-            <div class="flex justify-between items-center mb-12">
-                <h3 class="text-3xl font-black tracking-tight">ڕۆژژمێری مانگانە</h3>
-                <button onclick="closeModal('calendarModal')" class="w-14 h-14 rounded-full glass flex items-center justify-center hover:bg-white/10 transition-all active:scale-90">
-                    <i data-lucide="x" class="w-7 h-7"></i>
-                </button>
-            </div>
-            <div id="monthlyCalendar" class="space-y-4 pb-10"></div>
+    <div id="quranModal" class="fixed inset-0 z-[400] bg-black hidden flex flex-col">
+        <div class="p-6 border-b border-white/5 flex justify-between items-center">
+            <button onclick="closeModal('quranModal')" class="w-10 h-10 glass rounded-full flex items-center justify-center"><i data-lucide="chevron-right"></i></button>
+            <h4 id="modalSurahName" class="text-xl font-black font-['Noto_Sans_Arabic']">---</h4>
+            <div class="w-10"></div>
         </div>
+        <div id="ayahContainer" class="flex-1 overflow-y-auto p-6 space-y-8 text-right font-['Noto_Sans_Arabic'] no-scrollbar"></div>
     </div>
 
     <script>
-        /**
-         * ----------------------------------------------------------------------------
-         * APP DATA & CONFIG
-         * ----------------------------------------------------------------------------
-         */
         const CONFIG = {
-            lat: 36.1861, lng: 45.1211,
-            prayerNames: { Fajr: 'بەیانی', Sunrise: 'خۆرھەڵات', Dhuhr: 'نیوەڕۆ', Asr: 'عەسر', Maghrib: 'مەغریب', Isha: 'عیشا' },
-            azkar: [
-                { text: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ", count: 100, info: "١٠٠ جار" },
-                { text: "أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ", count: 100, info: "١٠٠ جار" },
-                { text: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ", count: 10, info: "١٠ جار" },
-                { text: "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ", count: 10, info: "١٠ جار" },
-                { text: "سُبْحَانَ اللَّهِ الْعَظِيمِ", count: 100, info: "١٠٠ جار" },
-                { text: "لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ", count: 100, info: "١٠٠ جار" },
-                { text: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ", count: 1, info: "١ جار" },
-                { text: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ", count: 1, info: "١ جار" }
-            ],
-            names: [
-                { ar: "الرَّحْمَنُ", ku: "بەخشندە" }, { ar: "الرَّحِيمُ", ku: "میهرەبان" },
-                { ar: "المَلِكُ", ku: "پاشا" }, { ar: "القُدُّوسُ", ku: "پاک" },
-                { ar: "السَّلَامُ", ku: "ئاشتیخواز" }, { ar: "المُؤْمِنُ", ku: "دڵنیاکەرەوە" },
-                { ar: "المُهَيْمِنُ", ku: "پارێزەر" }, { ar: "العَزِيزُ", ku: "باڵادەست" },
-                { ar: "الجَبَّارُ", ku: "توانا" }, { ar: "المُتَكَبِّرُ", ku: "گەورە" },
-                { ar: "الخَالِقُ", ku: "دروستکەر" }, { ar: "البَارِئُ", ku: "پەیداکەر" },
-                { ar: "المُصَوِّرُ", ku: "وێنەکێش" }, { ar: "الغَفَّارُ", ku: "لێخۆشبوو" },
-                { ar: "القَهَّارُ", ku: "زاڵ" }, { ar: "الوَهَّابُ", ku: "بەخشەر" }
-            ]
+            lat: 36.1861,
+            lng: 45.1211,
+            offsets: { Fajr: 3, Sunrise: 0, Dhuhr: 6, Asr: 2, Maghrib: 8, Isha: 4 },
+            names: { Fajr: 'بەیانی', Sunrise: 'خۆرھەڵات', Dhuhr: 'نیوەڕۆ', Asr: 'عەسر', Maghrib: 'مەغریب', Isha: 'عیشا' }
         };
 
         let state = {
-            prayerTimes: null, rawTimes: null,
-            notificationsEnabled: false, lastTriggered: null,
-            tasbihCount: 0, tasbihGoal: 33, tasbihLap: 0,
-            offsets: JSON.parse(localStorage.getItem('prayerOffsets')) || { Fajr: 0, Sunrise: 0, Dhuhr: 0, Asr: 0, Maghrib: 0, Isha: 0 }
+            times: {},
+            tasbih: parseInt(localStorage.getItem('tasbih_pro')) || 0,
+            muted: JSON.parse(localStorage.getItem('muted_prayers')) || {},
+            lastPlayed: '',
+            wakeLock: null
         };
 
-        /**
-         * ----------------------------------------------------------------------------
-         * CORE ENGINE
-         * ----------------------------------------------------------------------------
-         */
+        const ALL_NAMES = [
+            {ar: "الرَّحْمَنُ", ku: "بەخشندە"}, {ar: "الرَّحِيمُ", ku: "میهرەبان"}, {ar: "المَلِكُ", ku: "پاشا"}, {ar: "القُدُّوسُ", ku: "پاک"}, {ar: "السَّلَامُ", ku: "ئاشتی"}, {ar: "المُؤْمِنُ", ku: "بڕوادار"}, {ar: "المُهَيْمِنُ", ku: "پارێزەر"}, {ar: "العَزِيزُ", ku: "باڵادەست"}, {ar: "الجَبَّارُ", ku: "بەتوانا"}, {ar: "المُتَكَبِّرُ", ku: "گەورە"},
+            {ar: "الخَالِقُ", ku: "دروستکەر"}, {ar: "البَارِئُ", ku: "بەدیهێنەر"}, {ar: "المُصَوِّرُ", ku: "شێوەکێش"}, {ar: "الغَفَّارُ", ku: "لێخۆشبوو"}, {ar: "القَهَّارُ", ku: "زەبردەست"}, {ar: "الوَهَّابُ", ku: "بەخشەر"}, {ar: "الرَّزَّاقُ", ku: "ڕۆزیدەر"}, {ar: "الفَتَّاحُ", ku: "کۆکەرەوە"}, {ar: "العَلِيمُ", ku: "زانا"}, {ar: "القَابِضُ", ku: "گرتار"},
+            {ar: "البَاسِطُ", ku: "بڵاوکەرەوە"}, {ar: "الخَافِضُ", ku: "نزمکەرەوە"}, {ar: "الرَّافِعُ", ku: "بەرزکەرەوە"}, {ar: "المُعِزُّ", ku: "ڕێزدارکەر"}, {ar: "المُذِلُّ", ku: "سەرشۆڕکەر"}, {ar: "السَّمِيعُ", ku: "بیسەر"}, {ar: "البَصِيرُ", ku: "بینەر"}, {ar: "الحَكَمُ", ku: "دادوەر"}, {ar: "العَدْلُ", ku: "دادپەروەر"}, {ar: "اللَّطِيفُ", ku: "ناسک"},
+            {ar: "الخَبِيرُ", ku: "ئاگادار"}, {ar: "الحَلِيمُ", ku: "نەرم"}, {ar: "العَظِيمُ", ku: "مەزن"}, {ar: "الغَفُورُ", ku: "لێخۆشبوو"}, {ar: "الشَّكُورُ", ku: "سوپاسگوزار"}, {ar: "العَلِيُّ", ku: "بەرز"}, {ar: "الكَبِيرُ", ku: "گەورە"}, {ar: "الحَفِيظُ", ku: "پارێزەر"}, {ar: "المُقِيتُ", ku: "ڕۆزیدەر"}, {ar: "الحَسِيبُ", ku: "حسابکەر"},
+            {ar: "الجَلِيلُ", ku: "شکۆدار"}, {ar: "الكَرِيمُ", ku: "بەخشندە"}, {ar: "الرَّقِيبُ", ku: "چاودێر"}, {ar: "المُجِيبُ", ku: "وەڵامدەرەوە"}, {ar: "الوَاسِعُ", ku: "فراوان"}, {ar: "الحَكِيمُ", ku: "داناکەر"}, {ar: "الوَدُودُ", ku: "خۆشەویست"}, {ar: "المَجِيدُ", ku: "بەڕێز"}, {ar: "البَاعِثُ", ku: "زیندووکەرەوە"}, {ar: "الشَّهِيدُ", ku: "شایەت"},
+            {ar: "الحَقُّ", ku: "ڕاستەقینە"}, {ar: "الوَكِيلُ", ku: "وەکیل"}, {ar: "القَوِيُّ", ku: "بەهێز"}, {ar: "المَتِينُ", ku: "پتەو"}, {ar: "الوَلِيُّ", ku: "سەرپەرشتیکەر"}, {ar: "الحَمِيدُ", ku: "سوپاسکراو"}, {ar: "المُحْصِي", ku: "ئامارکەر"}, {ar: "المُبْدِئُ", ku: "سەرەتاکەر"}, {ar: "المُعِيدُ", ku: "گەڕێنەرەوە"}, {ar: "المُحْيِي", ku: "ژێنەرەوە"},
+            {ar: "المُمِيتُ", ku: "مرێنەر"}, {ar: "الحَيُّ", ku: "زیندوو"}, {ar: "القَيُّومُ", ku: "ڕاگیرکەر"}, {ar: "الوَاجِدُ", ku: "دۆزەرەوە"}, {ar: "المَاجِدُ", ku: "بەرێز"}, {ar: "الوَاحِدُ", ku: "تاک"}, {ar: "الأَحَدُ", ku: "تەنیا"}, {ar: "الصَّمَدُ", ku: "بێ نیاز"}, {ar: "القَادِرُ", ku: "بەتوانا"}, {ar: "المُقْتَدِرُ", ku: "بەدەسەڵات"},
+            {ar: "المُقَدِّمُ", ku: "پێشخەر"}, {ar: "المُؤَخِّرُ", ku: "پاشخەر"}, {ar: "الأَوَّلُ", ku: "یەکەم"}, {ar: "الآخِرُ", ku: "کۆتایی"}, {ar: "الظَّاهِرُ", ku: "ئاشکرا"}, {ar: "البَاطِنُ", ku: "پەنهان"}, {ar: "الوَالِي", ku: "سەرپەرشت"}, {ar: "المُTENTEALÎ", ku: "بەرز و بڵند"}, {ar: "البَرُّ", ku: "چاکەکار"}, {ar: "التَّوَّابُ", ku: "تۆبەوەرگر"},
+            {ar: "المُنْتَقِمُ", ku: "تۆڵەسێن"}, {ar: "العَفُوُّ", ku: "لێبوردە"}, {ar: "الرَّءُوفُ", ku: "دڵسۆز"}, {ar: "مَالِكُ المُلْكِ", ku: "خاوەنی پاشایەتی"}, {ar: "ذُو الجَلَالِ وَالإِكْرَامِ", ku: "خاوەن شکۆ"}, {ar: "المُقْسِطُ", ku: "دادپەروەر"}, {ar: "الجَامِعُ", ku: "کۆکەرەوە"}, {ar: "الغَنِيُّ", ku: "دەوڵەمەند"}, {ar: "المُغْنِي", ku: "دەوڵەمەندکەر"}, {ar: "المَانِعُ", ku: "رێگر"},
+            {ar: "الضَّارُّ", ku: "زیانبەخش"}, {ar: "النَّافِعُ", ku: "سوودبەخش"}, {ar: "النُّورُ", ku: "ڕووناکی"}, {ar: "الهَادِي", ku: "ڕێ نیشاندەر"}, {ar: "البَدِيعُ", ku: "داهێنەر"}, {ar: "البَاقِي", ku: "نەمر"}, {ar: "الوَارِثُ", ku: "جێگرەوە"}, {ar: "الرَّشِيدُ", ku: "شارەزا"}, {ar: "الصَّبُورُ", ku: "ئارامگر"}
+        ];
 
         async function init() {
+            lucide.createIcons();
+            await fetchData();
+            renderNames();
+            renderAzkar();
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            // Ask for Notification Permission
+            if ("Notification" in window) {
+                Notification.requestPermission();
+            }
+
+            // Keep screen on
+            if ('wakeLock' in navigator) {
+                try { state.wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
+            }
+
+            document.getElementById('loadingScreen').style.display = 'none';
+        }
+
+        async function fetchData() {
             try {
-                // Fetch Data
-                await fetchPrayerTimes();
+                const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${CONFIG.lat}&longitude=${CONFIG.lng}&method=3`);
+                const data = await res.json();
+                processTimes(data.data.timings);
+                fetchMonthly();
+                fetchSurahs();
+            } catch (e) { console.error(e); }
+        }
+
+        function processTimes(raw) {
+            Object.keys(CONFIG.names).forEach(key => {
+                let [h, m] = raw[key].split(':').map(Number);
+                let date = new Date();
+                date.setHours(h, m + CONFIG.offsets[key], 0, 0);
                 
-                // Render UI
-                renderAdjustments();
-                renderAzkar();
-                renderNames();
-                setupCompass();
-                
-                // Start Loops
-                setInterval(updateClock, 1000);
-                updateClock();
-                
-                // Load State
-                if(localStorage.getItem('tasbih')) {
-                    state.tasbihCount = parseInt(localStorage.getItem('tasbih'));
-                    updateTasbihUI();
+                let display = "";
+                if(['Asr', 'Maghrib', 'Isha'].includes(key)) {
+                    let hour = date.getHours();
+                    let ampm = hour >= 12 ? 'PM' : 'AM';
+                    hour = hour % 12 || 12;
+                    display = `${hour}:${date.getMinutes().toString().padStart(2, '0')} ${ampm}`;
+                } else {
+                    display = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
                 }
                 
-                // Finalize
-                lucide.createIcons();
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').classList.add('hidden');
-                }, 1500);
-            } catch (e) {
-                console.error("Init Error", e);
-                document.querySelector('#loadingScreen p').innerText = "کێشەیەک لە پەیوەندی هەیە، تکایە لاپەڕەکە نوێ بکەرەوە.";
-            }
-        }
-
-        async function fetchPrayerTimes() {
-            const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${CONFIG.lat}&longitude=${CONFIG.lng}&method=3`);
-            const data = await res.json();
-            if(data.code === 200) {
-                state.rawTimes = data.data.timings;
-                applyOffsets();
-                const hijri = data.data.date.hijri;
-                document.getElementById('hijriDateHeader').innerText = `${hijri.day} ${hijri.month.ar} ${hijri.year}`;
-                fetchMonthlyCalendar();
-            }
-        }
-
-        function applyOffsets() {
-            state.prayerTimes = {};
-            Object.keys(state.rawTimes).forEach(key => {
-                if (!CONFIG.prayerNames[key]) return;
-                const [h, m] = state.rawTimes[key].split(':').map(Number);
-                let d = new Date(); d.setHours(h, m + (state.offsets[key] || 0), 0);
-                state.prayerTimes[key] = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+                state.times[key] = { display, raw: date };
             });
-            renderPrayerList();
+            renderPrayers();
         }
 
-        function renderPrayerList() {
+        function renderPrayers() {
             const container = document.getElementById('prayerList');
             container.innerHTML = '';
-            ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'].forEach((key, idx) => {
+            Object.entries(CONFIG.names).forEach(([key, name]) => {
+                const isMuted = state.muted[key];
                 const div = document.createElement('div');
                 div.id = `prayer-${key}`;
-                div.style.animationDelay = `${idx * 100}ms`;
-                div.className = "glass p-8 rounded-[2.5rem] flex justify-between items-center transition-all duration-700 animate-fade-in shadow-lg";
+                div.className = "glass p-5 rounded-[1.8rem] flex justify-between items-center";
                 div.innerHTML = `
-                    <div class="flex items-center gap-6">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-neutral-600">
-                            <i data-lucide="${getIcon(key)}" class="w-7 h-7"></i>
-                        </div>
+                    <div class="flex items-center gap-4">
+                        <button onclick="toggleMute('${key}')" class="status-btn ${isMuted ? 'muted' : 'active'}">
+                            <i data-lucide="${isMuted ? 'bell-off' : 'bell'}" class="w-5 h-5"></i>
+                        </button>
                         <div>
-                            <span class="font-black text-xl block tracking-tight">${CONFIG.prayerNames[key]}</span>
-                            <span class="text-[10px] text-neutral-500 font-black uppercase tracking-[0.3em]">ئاسۆی قەڵادزێ</span>
+                            <p class="font-black text-lg">${name}</p>
+                            <p class="text-[9px] text-neutral-500 font-bold uppercase tracking-widest">Asoi Qaladze</p>
                         </div>
                     </div>
-                    <span class="text-3xl font-black tabular-nums tracking-tighter">${state.prayerTimes[key]}</span>
+                    <p class="text-xl font-black tabular-nums">${state.times[key].display}</p>
                 `;
                 container.appendChild(div);
             });
             lucide.createIcons();
         }
 
-        function getIcon(key) {
-            const icons = { Fajr: 'cloud-moon', Sunrise: 'sunrise', Dhuhr: 'sun', Asr: 'cloud-sun', Maghrib: 'sunset', Isha: 'moon' };
-            return icons[key] || 'clock';
-        }
-
         function updateClock() {
             const now = new Date();
-            document.getElementById('mainClock').innerText = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' });
-            document.getElementById('kurdishDate').innerText = new Intl.DateTimeFormat('ku-IQ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(now);
+            const timeString = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            document.getElementById('mainClock').innerText = timeString.slice(0,5);
+            document.getElementById('kurdishDate').innerText = new Intl.DateTimeFormat('ku-IQ', { weekday: 'long', day: 'numeric', month: 'long' }).format(now);
+            
+            let next = null;
+            let minDiff = Infinity;
+            
+            Object.entries(state.times).forEach(([key, data]) => {
+                let diff = data.raw.getTime() - now.getTime();
+                
+                // Trigger Athan
+                if (Math.abs(diff) < 1000 && state.lastPlayed !== key && !state.muted[key] && key !== 'Sunrise') {
+                    playAthan(key);
+                }
 
-            if (state.prayerTimes) {
-                let next = null; let minDiff = Infinity;
-                const nowSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+                if (diff < 0) diff += 86400000;
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    next = { key, name: CONFIG.names[key], diff };
+                }
+            });
 
-                Object.entries(state.prayerTimes).forEach(([key, timeStr]) => {
-                    const [h, m] = timeStr.split(':').map(Number);
-                    const prayerSec = h * 3600 + m * 60;
-                    let diff = prayerSec - nowSec;
-                    if (diff < 0) diff += 86400;
-                    if (diff < minDiff) { minDiff = diff; next = { name: key, diff: diff }; }
-                    if (diff >= 0 && diff <= 1 && state.lastTriggered !== key && key !== 'Sunrise') {
-                        state.lastTriggered = key; triggerAdhan(key);
-                    }
+            if (next) {
+                document.getElementById('nextPrayerName').innerText = next.name;
+                let s = Math.floor(next.diff / 1000);
+                let h = Math.floor(s / 3600);
+                let m = Math.floor((s % 3600) / 60);
+                let sec = s % 60;
+                document.getElementById('countdown').innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${sec.toString().padStart(2,'0')}`;
+                
+                document.querySelectorAll('[id^="prayer-"]').forEach(el => el.classList.remove('prayer-card-active'));
+                document.getElementById(`prayer-${next.key}`)?.classList.add('prayer-card-active');
+            }
+        }
+
+        function playAthan(key) {
+            state.lastPlayed = key;
+            const audio = document.getElementById('adhanAudio');
+            audio.play().catch(e => console.log("Audio blocked: user interaction needed"));
+            
+            if (Notification.permission === "granted") {
+                new Notification("کاتی بانگ", {
+                    body: `ئێستا کاتی بانگی ${CONFIG.names[key]}ـە لە قەڵادزێ`,
+                    vibrate: [200, 100, 200]
                 });
+            }
+        }
 
-                if (next) {
-                    document.getElementById('nextPrayerName').innerText = CONFIG.prayerNames[next.name];
-                    document.getElementById('countdown').innerText = formatSeconds(next.diff);
-                    document.getElementById('prayerProgress').style.width = `${100 - (next.diff / 14400 * 100)}%`;
-                    document.querySelectorAll('[id^="prayer-"]').forEach(el => el.classList.remove('prayer-card-active'));
-                    const activeEl = document.getElementById(`prayer-${next.name}`);
-                    if(activeEl) activeEl.classList.add('prayer-card-active');
+        function initCompass() {
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission().then(ps => {
+                        if (ps === 'granted') window.addEventListener('deviceorientation', handleOrientation, true);
+                    });
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation, true);
                 }
             }
         }
 
-        function triggerAdhan(name) {
-            if (state.notificationsEnabled && Notification.permission === "granted") {
-                new Notification(`کاتی بانگی ${CONFIG.prayerNames[name]}ە`, { body: 'ئاسۆی قەڵادزێ' });
+        function handleOrientation(event) {
+            let heading = event.webkitCompassHeading || (360 - event.alpha);
+            if(heading) {
+                const qibla = 195; 
+                document.getElementById('compass-disc').style.transform = `rotate(${-heading + qibla}deg)`;
             }
-            document.getElementById('adhanAudio').play().catch(e => console.log("Audio Blocked"));
         }
-
-        /**
-         * ----------------------------------------------------------------------------
-         * UI LOGIC
-         * ----------------------------------------------------------------------------
-         */
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.replace('text-amber-500', 'text-neutral-600'));
-            document.getElementById(`nav-${tabId}`).classList.replace('text-neutral-600', 'text-amber-500');
-            lucide.createIcons();
-        }
-
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
 
         function incrementTasbih() {
-            state.tasbihCount++;
-            if(navigator.vibrate) navigator.vibrate(40);
-            if(state.tasbihCount >= state.tasbihGoal) {
-                state.tasbihCount = 0; state.tasbihLap++;
-                if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
-            }
-            updateTasbihUI();
-            localStorage.setItem('tasbih', state.tasbihCount);
+            state.tasbih++;
+            document.getElementById('tasbihCount').innerText = state.tasbih;
+            localStorage.setItem('tasbih_pro', state.tasbih);
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            // Critical: Unlock audio for auto-play later
+            const audio = document.getElementById('adhanAudio');
+            audio.play().then(() => { audio.pause(); audio.currentTime = 0; }).catch(e => {});
         }
 
-        function resetTasbih() { state.tasbihCount = 0; state.tasbihLap = 0; updateTasbihUI(); localStorage.setItem('tasbih', 0); }
-
-        function updateTasbihUI() {
-            document.getElementById('tasbihCount').innerText = state.tasbihCount;
-            document.getElementById('tasbihLap').innerText = `خولی ${state.tasbihLap}`;
-            const offset = 911 - ( (state.tasbihCount % state.tasbihGoal) / state.tasbihGoal * 911);
-            document.getElementById('tasbihProgress').style.strokeDashoffset = offset;
+        function resetTasbih() {
+            state.tasbih = 0;
+            document.getElementById('tasbihCount').innerText = 0;
+            localStorage.setItem('tasbih_pro', 0);
         }
 
-        function setTasbihGoal(g) { state.tasbihGoal = g; state.tasbihCount = 0; updateTasbihUI(); }
-
-        function setupCompass() {
-            const qibla = 192; const compass = document.getElementById('compass');
-            window.addEventListener('deviceorientation', (e) => {
-                const heading = e.webkitCompassHeading || e.alpha;
-                if(heading) compass.style.transform = `rotate(${-heading + qibla}deg)`;
-            });
+        function toggleMute(key) {
+            state.muted[key] = !state.muted[key];
+            localStorage.setItem('muted_prayers', JSON.stringify(state.muted));
+            renderPrayers();
         }
 
-        function renderAdjustments() {
-            const container = document.getElementById('adjustmentList'); container.innerHTML = '';
-            Object.keys(CONFIG.prayerNames).forEach(key => {
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between bg-white/5 p-4 rounded-3xl";
-                div.innerHTML = `<span class="text-xs font-black uppercase tracking-widest">${CONFIG.prayerNames[key]}</span><div class="flex items-center gap-5"><button onclick="updateOffset('${key}', -1)" class="w-10 h-10 glass rounded-xl flex items-center justify-center hover:bg-white/10 transition-all">-</button><span id="offset-${key}" class="w-8 text-center font-black tabular-nums text-amber-500 text-lg">${state.offsets[key]}</span><button onclick="updateOffset('${key}', 1)" class="w-10 h-10 glass rounded-xl flex items-center justify-center hover:bg-white/10 transition-all">+</button></div>`;
-                container.appendChild(div);
-            });
-        }
-
-        function updateOffset(key, val) {
-            state.offsets[key] += val;
-            document.getElementById(`offset-${key}`).innerText = state.offsets[key];
-            localStorage.setItem('prayerOffsets', JSON.stringify(state.offsets));
-            applyOffsets();
-        }
-
-        async function toggleNotifications() {
-            if (!state.notificationsEnabled) {
-                const p = await Notification.requestPermission();
-                if (p === "granted") { state.notificationsEnabled = true; updateNotifUI(true); }
-            } else { state.notificationsEnabled = false; updateNotifUI(false); }
-        }
-
-        function updateNotifUI(e) {
-            const c = document.getElementById('notifCircle'); const t = document.getElementById('notifToggle');
-            const i = document.getElementById('notifIcon');
-            c.style.left = e ? '32px' : '6px';
-            t.classList.toggle('bg-amber-500', e); t.classList.toggle('bg-neutral-900', !e);
-            i.innerHTML = `<i data-lucide="${e ? 'bell' : 'bell-off'}" class="w-7 h-7"></i>`;
-            i.classList.toggle('text-amber-500', e); i.classList.toggle('text-neutral-600', !e);
+        function switchTab(id) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(`tab-${id}`).classList.add('active');
+            document.getElementById(`nav-${id}`).classList.add('active');
             lucide.createIcons();
         }
 
-        function formatSeconds(s) { return `${Math.floor(s/3600).toString().padStart(2,'0')}:${Math.floor((s%3600)/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`; }
-
-        function renderAzkar() {
-            const container = document.getElementById('azkarList');
-            CONFIG.azkar.forEach((z, idx) => {
-                const div = document.createElement('div'); div.className = "glass p-8 rounded-[3rem] space-y-4 animate-fade-in";
-                div.style.animationDelay = `${idx * 100}ms`;
-                div.innerHTML = `<p class="text-2xl font-bold text-right leading-relaxed">${z.text}</p><p class="text-xs text-neutral-500 font-medium">${z.info}</p>`;
-                container.appendChild(div);
-            });
+        function switchAzkarSub(type) {
+            document.getElementById('sub-azkar').classList.toggle('hidden', type !== 'azkar');
+            document.getElementById('sub-names').classList.toggle('hidden', type !== 'names');
+            document.getElementById('btn-sub-azkar').className = type === 'azkar' ? 'flex-1 py-3 rounded-xl font-bold bg-amber-500 text-black' : 'flex-1 py-3 rounded-xl font-bold text-neutral-400';
+            document.getElementById('btn-sub-names').className = type === 'names' ? 'flex-1 py-3 rounded-xl font-bold bg-amber-500 text-black' : 'flex-1 py-3 rounded-xl font-bold text-neutral-400';
         }
 
         function renderNames() {
-            const container = document.getElementById('namesList');
-            CONFIG.names.forEach((n, idx) => {
-                const div = document.createElement('div'); div.className = "glass p-6 rounded-3xl text-center animate-fade-in";
-                div.style.animationDelay = `${idx * 50}ms`;
-                div.innerHTML = `<h4 class="text-2xl font-black text-amber-500 mb-1">${n.ar}</h4><p class="text-[10px] text-white font-bold">${n.ku}</p>`;
+            const container = document.getElementById('sub-names');
+            ALL_NAMES.forEach(n => {
+                const div = document.createElement('div');
+                div.className = "glass p-4 rounded-2xl text-center";
+                div.innerHTML = `<p class="text-xl font-black text-amber-500">${n.ar}</p><p class="text-[10px] text-neutral-500 font-bold font-['Noto_Sans_Arabic']">${n.ku}</p>`;
                 container.appendChild(div);
             });
         }
 
-        async function fetchMonthlyCalendar() {
-            try {
-                const res = await fetch(`https://api.aladhan.com/v1/calendar?latitude=${CONFIG.lat}&longitude=${CONFIG.lng}&method=3`);
-                const data = await res.json();
-                if(data.code === 200) {
-                    const container = document.getElementById('monthlyCalendar');
-                    container.innerHTML = '';
-                    data.data.forEach(day => {
-                        const div = document.createElement('div'); div.className = "glass p-5 rounded-2xl flex justify-between items-center text-[11px] font-bold";
-                        div.innerHTML = `<span class="text-neutral-500">${day.date.readable}</span><span class="text-amber-500">${day.timings.Maghrib.split(' ')[0]}</span>`;
-                        container.appendChild(div);
-                    });
-                }
-            } catch (e) { console.error(e); }
+        function renderAzkar() {
+            const azkar = [
+                {t: "سُبْحَانَ اللَّهِ", c: "١٠٠ جار"}, {t: "الْحَمْدُ لِلَّهِ", c: "١٠٠ جار"},
+                {t: "لَا إِلَهَ إِلَّا اللَّهُ", c: "١٠٠ جار"}, {t: "اللَّهُ أَكْبەرُ", c: "١٠٠ جار"}
+            ];
+            const container = document.getElementById('sub-azkar');
+            azkar.forEach(a => {
+                const div = document.createElement('div');
+                div.className = "glass p-5 rounded-2xl flex justify-between items-center";
+                div.innerHTML = `<div><p class="text-lg font-bold">${a.t}</p><p class="text-xs text-amber-500 font-bold">${a.c}</p></div><i data-lucide="sparkles" class="w-4 h-4 text-neutral-600"></i>`;
+                container.appendChild(div);
+            });
         }
 
-        function handleAudioUpload(e) {
-            const file = e.target.files[0];
-            if(file) {
-                document.getElementById('adhanAudio').src = URL.createObjectURL(file);
-                alert("دەنگی بانگ گۆڕدرا");
-            }
+        async function fetchSurahs() {
+            const res = await fetch(`https://api.alquran.cloud/v1/surah`);
+            const data = await res.json();
+            const container = document.getElementById('surahList');
+            data.data.forEach(s => {
+                const div = document.createElement('div');
+                div.className = "glass p-4 rounded-2xl flex justify-between items-center cursor-pointer active:scale-95";
+                div.onclick = () => openSurah(s.number);
+                div.innerHTML = `<div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center text-amber-500 font-black text-xs">${s.number}</div><div><p class="font-bold">${s.name}</p><p class="text-[9px] text-neutral-500">${s.numberOfAyahs} ئایەت</p></div></div><i data-lucide="chevron-left" class="w-4 h-4 text-neutral-700"></i>`;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
         }
 
-        function testAudio() { document.getElementById('adhanAudio').play(); }
+        async function openSurah(num) {
+            const modal = document.getElementById('quranModal');
+            modal.classList.remove('hidden');
+            const container = document.getElementById('ayahContainer');
+            container.innerHTML = '<p class="text-center text-amber-500 animate-pulse">خەریکی وەرگرتنی ئایەتەکانە...</p>';
+            const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}/ku.asan`);
+            const data = await res.json();
+            const resAr = await fetch(`https://api.alquran.cloud/v1/surah/${num}`);
+            const dataAr = await resAr.json();
+            document.getElementById('modalSurahName').innerText = data.data.name;
+            container.innerHTML = '';
+            dataAr.data.ayahs.forEach((a, i) => {
+                const div = document.createElement('div');
+                div.className = "space-y-2 border-r-2 border-amber-500/30 pr-4";
+                div.innerHTML = `<p class="text-2xl leading-loose font-serif">${a.text}</p><p class="text-sm text-neutral-400 leading-relaxed font-['Noto_Sans_Arabic']">${data.data.ayahs[i].text}</p>`;
+                container.appendChild(div);
+            });
+        }
 
-        // Start App
+        async function fetchMonthly() {
+            const res = await fetch(`https://api.aladhan.com/v1/calendar?latitude=${CONFIG.lat}&longitude=${CONFIG.lng}&method=3`);
+            const data = await res.json();
+            const container = document.getElementById('monthlyCalendar');
+            data.data.forEach(d => {
+                const div = document.createElement('div');
+                div.className = "glass p-4 rounded-xl flex justify-between items-center text-xs";
+                div.innerHTML = `<span class="text-neutral-500 font-bold">${d.date.readable}</span><span class="font-black text-amber-500">${d.timings.Maghrib.split(' ')[0]}</span>`;
+                container.appendChild(div);
+            });
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
         init();
     </script>
 </body>
