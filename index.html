@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,8 @@
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/450380601a15e12a80be482ee5149dd6dc52a0de/D5208D5D-BECD-4A90-9B8F-B7FC0679E5FA.jpeg">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/450380601a15e12a80be482ee5149dd6dc52a0de/D5208D5D-BECD-4A90-9B8F-B7FC0679E5FA.jpeg">
     
-    <link rel="manifest" href="data:application/json;base64,ewogICJpZCI6ICJhc29pLXFhbGFkemUiLAogICJuYW1lIjogIsカイ4LPۆی Þەڵادزێ ÞڕۆIiwKICAic2hvcnRfbmFtZSI6ICJhc29pIiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwMjAyMDIiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vcmFtaXFhbGFkemF5MC9yYW1hZGFuLWNoYWxsZW5nZS80NTAzODA2MDFhMTVlMTJhODBiZTQ4MmVlNTE0OWRkNmRjNTJhMGRlL0Q1MjA4RDVELUJFQ0QtNEE5MC05QjhGLUI3RkMwNjc5RTVGQS5qcGVnIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9qcGVnIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0KfQ==">
+    <!-- بەستنەوەی manifest بۆ ئەوەی وەک ئەپ دابەزێت -->
+    <link rel="manifest" href="/manifest.json">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -211,8 +212,15 @@
             
             // Register SW and Schedule Notifications
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').then(reg => {
+                navigator.serviceWorker.register('/sw.js').then(reg => {
                     console.log('SW Registered');
+                });
+                
+                navigator.serviceWorker.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'PLAY_ATHAN') {
+                        const audio = document.getElementById('adhanAudio');
+                        audio.play().catch(e => console.log("Audio blocked", e));
+                    }
                 });
             }
 
