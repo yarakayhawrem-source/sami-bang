@@ -1,0 +1,18 @@
+{
+  "name": "Athan Times",
+  "short_name": "بانگ",
+  "description": "بەرنامەی کاتەکانی بانگ بۆ شاری قەڵادزێ",
+  "start_url": "/sami-bang/",
+  "display": "standalone",
+  "background_color": "#020202",
+  "theme_color": "#fbbf24",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/450380601a15e12a80be482ee5149dd6dc52a0de/D5208D5D-BECD-4A90-9B8F-B7FC0679E5FA.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
