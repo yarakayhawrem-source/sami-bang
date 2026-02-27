@@ -190,8 +190,7 @@
             tasbih: parseInt(localStorage.getItem('tasbih_pro')) || 0,
             muted: JSON.parse(localStorage.getItem('muted_prayers')) || {},
             lastPlayed: '',
-            wakeLock: null,
-            audioUnlocked: false
+            wakeLock: null
         };
 
         const ALL_NAMES = [
@@ -199,9 +198,9 @@
             {ar: "الخَالِقُ", ku: "دروستکەر"}, {ar: "البَارِئُ", ku: "بەدیهێنەر"}, {ar: "المُصَوِّرُ", ku: "شێوەکێش"}, {ar: "الغَفَّارُ", ku: "لێخۆشبوو"}, {ar: "القَهَّارُ", ku: "زەبردەست"}, {ar: "الوَهَّابُ", ku: "بەخشەر"}, {ar: "الرَّزَّاقُ", ku: "ڕۆزیدەر"}, {ar: "الفَتَّاحُ", ku: "کۆکەرەوە"}, {ar: "العَلِيمُ", ku: "زانا"}, {ar: "القَابِضُ", ku: "گرتار"},
             {ar: "البَاسِطُ", ku: "بڵاوکەرەوە"}, {ar: "الخَافِضُ", ku: "نزمکەرەوە"}, {ar: "الرَّافِعُ", ku: "بەرزکەرەوە"}, {ar: "المُعِزُّ", ku: "ڕێزدارکەر"}, {ar: "المُذِلُّ", ku: "سەرشۆڕکەر"}, {ar: "السَّمِيعُ", ku: "بیسەر"}, {ar: "البَصِيرُ", ku: "بینەر"}, {ar: "الحَكَمُ", ku: "دادوەر"}, {ar: "العَدْلُ", ku: "دادپەروەر"}, {ar: "اللَّطِيفُ", ku: "ناسک"},
             {ar: "الخَبِيرُ", ku: "ئاگادار"}, {ar: "الحَلِيمُ", ku: "نەرم"}, {ar: "العَظِيمُ", ku: "مەزن"}, {ar: "الغَفُورُ", ku: "لێخۆشبوو"}, {ar: "الشَّكُورُ", ku: "سوپاسگوزار"}, {ar: "العَلِيُّ", ku: "بەرز"}, {ar: "الكَبِيرُ", ku: "گەورە"}, {ar: "الحَفِيظُ", ku: "پارێزەر"}, {ar: "المُقِيتُ", ku: "ڕۆزیدەر"}, {ar: "الحَسِيبُ", ku: "حسابکەر"},
-            {ar: "الجَلِILُ", ku: "شکۆدار"}, {ar: "الكَرِيمُ", ku: "بەخشندە"}, {ar: "الرَّقِيبُ", ku: "چاودێر"}, {ar: "المُجِيبُ", ku: "وەڵامدەرەوە"}, {ar: "الوَاسِعُ", ku: "فراوان"}, {ar: "الحَكِيمُ", ku: "داناکەر"}, {ar: "الوَدُودُ", ku: "خۆشەویست"}, {ar: "المَجِيدُ", ku: "بەڕێز"}, {ar: "البَاعِثُ", ku: "زیندووکەرەوە"}, {ar: "الشَّهِيدُ", ku: "شایەت"},
-            {ar: "الحَقُّ", ku: "ڕاستەقینە"}, {ar: "الوَكِيلُ", ku: "وەکیل"}, {ar: "القَوِيُّ", ku: "بەهێز"}, {ar: "المَتِينُ", ku: "پتەو"}, {ar: "الوَلِيُّ", ku: "سەرپەرشتیکەر"}, {ar: "الحَمِيدُ", ku: "سوپاسکراو"}, {ar: "المُحْصِي", ku: "ئامارکەر"}, {ar: "المُبْدِئُ", ku: "سەرەتاکەر"}, {ar: "المُعِيدُ", ku: "گەڕێنەرەوە"}, {ar: "المُحْيِي", ku: "ژێنەرەوە"},
-            {ar: "المُمِيتُ", ku: "مرێنەر"}, {ar: "الحَيُّ", ku: "زیندوو"}, {ar: "القَيُّومُ", ku: "ڕاگیرکەر"}, {ar: "الوَاجِدُ", ku: "دۆزەرەوە"}, {ar: "المَاجِدُ", ku: "بەرێز"}, {ar: "الوَاحِدُ", ku: "تاک"}, {ar: "الأَحَدُ", ku: "تەنیا"}, {ar: "الصَّمَدُ", ku: "بێ نیاز"}, {ar: "القَادِرُ", ku: "بەتوانا"}, {ar: "المُقْتَدِرُ", ku: "بەدەسەڵات"},
+            {ar: "الجَلِيلُ", ku: "شکۆدار"}, {ar: "الكَرِيمُ", ku: "بەخشندە"}, {ar: "الرَّقِيبُ", ku: "چاودێر"}, {ar: "المُجِيبُ", ku: "وەڵامدەرەوە"}, {ar: "الوَاسِعُ", ku: "فراوان"}, {ar: "الحَكِيمُ", ku: "داناکەر"}, {ar: "الوَدُودُ", ku: "خۆشەویست"}, {ar: "المَجِيدُ", ku: "بەڕێز"}, {ar: "البَاعِثُ", ku: "زیندووکەرەوە"}, {ar: "الشَّهِيدُ", ku: "شایەت"},
+            {ar: "الحَقُّ", ku: "ڕاستەقینە"}, {ar: "الوَكِيلُ", ku: "وەکیل"}, {ar: "القَوِيُّ", ku: "بەهێز"}, {ar: "المَتِينُ", ku: "پتەو"}, {ar: "الوَلِيُّ", ku: "سەرپەرشتیکەر"}, {ar: "الحَمِيدُ", ku: "سوپاسکراو"}, {ar: "المُحْصِي", ku: "ئامارکەر"}, {ar: "المُبْدِئُ", ku: "سەرەتاکەر"}, {ar: "المُمعِيدُ", ku: "گەڕێنەرەوە"}, {ar: "المُحْيِي", ku: "ژێنەرەوە"},
+            {ar: "المُمِیتُ", ku: "مرێنەر"}, {ar: "الحَيُّ", ku: "زیندوو"}, {ar: "القَيُّومُ", ku: "ڕاگیرکەر"}, {ar: "الوَاجِدُ", ku: "دۆزەرەوە"}, {ar: "المَاجِدُ", ku: "بەرێز"}, {ar: "الوَاحِدُ", ku: "تاک"}, {ar: "الأَحَدُ", ku: "تەنیا"}, {ar: "الصَّمَدُ", ku: "بێ نیاز"}, {ar: "القَادِرُ", ku: "بەتوانا"}, {ar: "المُقْتَدِرُ", ku: "بەدەسەڵات"},
             {ar: "المُقَدِّمُ", ku: "پێشخەر"}, {ar: "المُؤَخِّرُ", ku: "پاشخەر"}, {ar: "الأَوَّلُ", ku: "یەکەم"}, {ar: "الآخِرُ", ku: "کۆتایی"}, {ar: "الظَّاهِرُ", ku: "ئاشکرا"}, {ar: "البَاطِنُ", ku: "پەنهان"}, {ar: "الوَالِي", ku: "سەرپەرشت"}, {ar: "المُتَعَالِي", ku: "بەرز و بڵند"}, {ar: "البَرُّ", ku: "چاکەکار"}, {ar: "التَّوَّابُ", ku: "تۆبەوەرگر"},
             {ar: "المُنْتَقِمُ", ku: "تۆڵەسێن"}, {ar: "العَفُوُّ", ku: "لێبوردە"}, {ar: "الرَّءُوفُ", ku: "دڵسۆز"}, {ar: "مَالِكُ المُلْكِ", ku: "خاوەنی پاشایەتی"}, {ar: "ذُو الجَلَالِ وَالإِكْرَامِ", ku: "خاوەن شکۆ"}, {ar: "المُقْسِطُ", ku: "دادپەروەر"}, {ar: "الجَامِعُ", ku: "کۆکەرەوە"}, {ar: "الغَنِيُّ", ku: "دەوڵەمەند"}, {ar: "المُغْنِي", ku: "دەوڵەمەندکەر"}, {ar: "المَانِعُ", ku: "رێگر"},
             {ar: "الضَّارُّ", ku: "زیانبەخش"}, {ar: "النَّافِعُ", ku: "سوودبەخش"}, {ar: "النُّورُ", ku: "ڕووناکی"}, {ar: "الهَادِي", ku: "ڕێ نیشاندەر"}, {ar: "البَدِيعُ", ku: "داهێنەر"}, {ar: "البَاقِي", ku: "نەمر"}, {ar: "الوَارِثُ", ku: "جێگرەوە"}, {ar: "الرَّشِيدُ", ku: "شارەزا"}, {ar: "الصَّبُورُ", ku: "ئارامگر"}
@@ -209,39 +208,31 @@
 
         async function init() {
             lucide.createIcons();
+            
+            // Register SW and Schedule Notifications
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').then(reg => {
+                    console.log('SW Registered');
+                });
+            }
+
             await fetchData();
             renderNames();
             renderAzkar();
             updateClock();
             setInterval(updateClock, 1000);
             
-            // داواکردنی رێگەپێدان بۆ نۆتفیکەیشن بە شێوەیەکی باشتر
             if ("Notification" in window) {
-                if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-                    Notification.requestPermission();
-                }
+                Notification.requestPermission().then(permission => {
+                    if(permission === 'granted') scheduleAllPrayers();
+                });
             }
 
             if ('wakeLock' in navigator) {
                 try { state.wakeLock = await navigator.wakeLock.request('screen'); } catch(e){}
             }
 
-            // چالاککردنی دەنگ لەگەڵ یەکەم کلیک لە هەر شوێنێکی شاشەکە
-            window.addEventListener('click', unlockAudio, { once: true });
-            window.addEventListener('touchstart', unlockAudio, { once: true });
-
             document.getElementById('loadingScreen').style.display = 'none';
-        }
-
-        function unlockAudio() {
-            if (!state.audioUnlocked) {
-                const audio = document.getElementById('adhanAudio');
-                audio.play().then(() => {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    state.audioUnlocked = true;
-                }).catch(e => console.log("Audio unlock failed"));
-            }
         }
 
         async function fetchData() {
@@ -251,6 +242,7 @@
                 processTimes(data.data.timings);
                 fetchMonthly();
                 fetchSurahs();
+                scheduleAllPrayers(); // Schedule after fetching
             } catch (e) { console.error(e); }
         }
 
@@ -273,6 +265,30 @@
                 state.times[key] = { display, raw: date };
             });
             renderPrayers();
+        }
+
+        function scheduleAllPrayers() {
+            if (!("Notification" in window) || Notification.permission !== "granted") return;
+            const now = new Date().getTime();
+
+            Object.entries(state.times).forEach(([key, data]) => {
+                if (key === 'Sunrise') return;
+                const prayerTime = data.raw.getTime();
+                const diff = prayerTime - now;
+
+                if (diff > 0) {
+                    navigator.serviceWorker.ready.then(registration => {
+                        if (navigator.serviceWorker.controller) {
+                            navigator.serviceWorker.controller.postMessage({
+                                type: 'SCHEDULE_NOTIFICATION',
+                                title: `کاتی بانگی ${CONFIG.names[key]}`,
+                                body: `ئێستا کاتی بانگە لە شاری قەڵادزێ`,
+                                delay: diff
+                            });
+                        }
+                    });
+                }
+            });
         }
 
         function renderPrayers() {
@@ -312,7 +328,6 @@
             Object.entries(state.times).forEach(([key, data]) => {
                 let diff = data.raw.getTime() - now.getTime();
                 
-                // پشکنینی کاتی بانگ (بە وردی چرکە)
                 if (Math.abs(diff) < 1000 && state.lastPlayed !== key && !state.muted[key] && key !== 'Sunrise') {
                     playAthan(key);
                 }
@@ -340,24 +355,13 @@
         function playAthan(key) {
             state.lastPlayed = key;
             const audio = document.getElementById('adhanAudio');
+            audio.play().catch(e => console.log("Audio blocked: user interaction needed"));
             
-            // هەوڵی لێدانی دەنگ
-            audio.currentTime = 0;
-            audio.play().catch(e => {
-                console.log("Audio play blocked: Needs interaction");
-            });
-            
-            // ناردنی نۆتفیکەیشن
-            if ("Notification" in window && Notification.permission === "granted") {
-                try {
-                    const notification = new Notification("کاتی بانگ", {
-                        body: `ئێستا کاتی بانگی ${CONFIG.names[key]}ـە لە قەڵادزێ`,
-                        icon: 'https://raw.githubusercontent.com/ramiqaladzay0/ramadan-challenge/450380601a15e12a80be482ee5149dd6dc52a0de/D5208D5D-BECD-4A90-9B8F-B7FC0679E5FA.jpeg',
-                        vibrate: [200, 100, 200]
-                    });
-                } catch (e) {
-                    console.error("Notification error:", e);
-                }
+            if (Notification.permission === "granted") {
+                new Notification("کاتی بانگ", {
+                    body: `ئێستا کاتی بانگی ${CONFIG.names[key]}ـە لە قەڵادزێ`,
+                    vibrate: [200, 100, 200]
+                });
             }
         }
 
